@@ -26,8 +26,9 @@ public class TodoController {
     TodoService todoService;
     @PostMapping
     public ResponseEntity<Todo> createTodo(@RequestBody Todo todo){
-
         Todo resultantTodo = todoService.createTodo(todo);
+        String s = null;
+        s.length();
         return new ResponseEntity<>(resultantTodo, HttpStatus.CREATED);
     }
 
@@ -59,4 +60,11 @@ public class TodoController {
         boolean isDeleted = todoService.deleteTodo(id);
         return isDeleted;
     }
+
+    //Exception handler
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<String> handleNullPointerException(NullPointerException ex){
+        return new ResponseEntity<>("Null pointer exception: "+ex.getMessage(),HttpStatus.BAD_REQUEST);
+    }
+
 }
