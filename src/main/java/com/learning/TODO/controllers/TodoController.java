@@ -1,5 +1,6 @@
 package com.learning.TODO.controllers;
 
+import com.learning.TODO.exceptions.TodoNotFoundException;
 import com.learning.TODO.models.Todo;
 import com.learning.TODO.services.TodoService;
 import org.slf4j.Logger;
@@ -27,8 +28,8 @@ public class TodoController {
     @PostMapping
     public ResponseEntity<Todo> createTodo(@RequestBody Todo todo){
         Todo resultantTodo = todoService.createTodo(todo);
-        String s = null;
-        s.length();
+//        String s = null;
+//        s.length();
         return new ResponseEntity<>(resultantTodo, HttpStatus.CREATED);
     }
 
@@ -48,9 +49,9 @@ public class TodoController {
 
     @PutMapping(value = "/{id}",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public Map<String,Object> updateTodo(@PathVariable Integer id, @RequestBody Todo todo){
-        boolean isUpdated = todoService.updateTodo(id,todo);
+        Todo updatedTodo = todoService.updateTodo(id,todo);
         Map<String,Object>  response = new HashMap<>();
-        response.put("isSuccessful",isUpdated);
+        response.put("isSuccessful",true);
         response.put("data",todo);
         return response;
     }
@@ -60,11 +61,11 @@ public class TodoController {
         boolean isDeleted = todoService.deleteTodo(id);
         return isDeleted;
     }
-
+    
     //Exception handler
-    @ExceptionHandler(NullPointerException.class)
-    public ResponseEntity<String> handleNullPointerException(NullPointerException ex){
-        return new ResponseEntity<>("Null pointer exception: "+ex.getMessage(),HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(NumberFormatException.class)
+    public ResponseEntity<String> handleNumberFormatPointerException(NumberFormatException ex){
+        return new ResponseEntity<>("File level:Number-format exception: "+ex.getMessage(),HttpStatus.BAD_REQUEST);
     }
 
 }
