@@ -54,30 +54,30 @@ public class TodoDAO {
     //Get single todo
     public Todo getTodo(int id){
         String selectQuery = "select * from todo where id=?";
-        Map<String,Object> todoMap = jdbcTemplate.queryForMap(selectQuery,id);
-        logger.info("todo {}", todoMap);
-        Todo resultantTodo = new Todo();
-        resultantTodo.setId((Integer)todoMap.get("id"));
-        resultantTodo.setTitle((String)todoMap.get("title"));
-        resultantTodo.setContent((String) todoMap.get("content"));
-        resultantTodo.setTodoDate(Helper.parseDate(todoMap.get("todoDate")));
-        resultantTodo.setCreatedDate(Helper.parseDate(todoMap.get("createdDate")));
-        return resultantTodo;
+        Todo todo = jdbcTemplate.queryForObject(selectQuery,new TodoMapper(),id);
+//        logger.info("todo {}", todoMap);
+//        Todo resultantTodo = new Todo();
+//        resultantTodo.setId((Integer)todoMap.get("id"));
+//        resultantTodo.setTitle((String)todoMap.get("title"));
+//        resultantTodo.setContent((String) todoMap.get("content"));
+//        resultantTodo.setTodoDate(Helper.parseDate(todoMap.get("todoDate")));
+//        resultantTodo.setCreatedDate(Helper.parseDate(todoMap.get("createdDate")));
+        return todo;
     }
 
     public List<Todo> getAllTodos(){
         String selectQuery = "select * from todo;";
-        List<Map<String,Object>> todosMap = jdbcTemplate.queryForList(selectQuery);
-        List<Todo> todosList = todosMap.stream()
-                .map((todoMap)->{
-                    Todo resultantTodo = new Todo();
-                    resultantTodo.setId((Integer)todoMap.get("id"));
-                    resultantTodo.setTitle((String)todoMap.get("title"));
-                    resultantTodo.setContent((String) todoMap.get("content"));
-                    resultantTodo.setTodoDate(Helper.parseDate(todoMap.get("todoDate")));
-                    resultantTodo.setCreatedDate(Helper.parseDate(todoMap.get("createdDate")));
-                    return resultantTodo;
-                }).collect(Collectors.toList());
+        List<Todo> todosList = jdbcTemplate.query(selectQuery,new TodoMapper());
+//        List<Todo> todosList = todosMap.stream()
+//                .map((todoMap)->{
+//                    Todo resultantTodo = new Todo();
+//                    resultantTodo.setId((Integer)todoMap.get("id"));
+//                    resultantTodo.setTitle((String)todoMap.get("title"));
+//                    resultantTodo.setContent((String) todoMap.get("content"));
+//                    resultantTodo.setTodoDate(Helper.parseDate(todoMap.get("todoDate")));
+//                    resultantTodo.setCreatedDate(Helper.parseDate(todoMap.get("createdDate")));
+//                    return resultantTodo;
+//                }).collect(Collectors.toList());
         return todosList;
     }
 

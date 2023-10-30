@@ -61,7 +61,7 @@ public class TodoController {
         boolean isDeleted = todoService.deleteTodo(id);
         return isDeleted;
     }
-    
+
     //Exception handler
     @ExceptionHandler(NumberFormatException.class)
     public ResponseEntity<String> handleNumberFormatPointerException(NumberFormatException ex){
