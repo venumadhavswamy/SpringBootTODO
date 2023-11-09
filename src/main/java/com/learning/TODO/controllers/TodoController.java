@@ -1,7 +1,7 @@
 package com.learning.TODO.controllers;
 
+import com.learning.TODO.entities.TodoEntity;
 import com.learning.TODO.exceptions.TodoNotFoundException;
-import com.learning.TODO.models.Todo;
 import com.learning.TODO.services.TodoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.crypto.Data;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,11 +21,11 @@ public class TodoController {
 
     Logger logger = LoggerFactory.getLogger(TodoController.class);
 
-    @Autowired
-    TodoService todoService;
+    @Autowired(required = false)
+    private TodoService todoService;
     @PostMapping
-    public ResponseEntity<Todo> createTodo(@RequestBody Todo todo){
-        Todo resultantTodo = todoService.createTodo(todo);
+    public ResponseEntity<TodoEntity> createTodo(@RequestBody TodoEntity todo){
+        TodoEntity resultantTodo = todoService.createTodo(todo);
 //        String s = null;
 //        s.length();
         return new ResponseEntity<>(resultantTodo, HttpStatus.CREATED);
@@ -35,21 +33,27 @@ public class TodoController {
 
     //Get all todos
     @GetMapping
-    public ResponseEntity<List<Todo>> getAllTodos(){
-        List<Todo> allTodos = todoService.getAllTodos();
+    public ResponseEntity<List<TodoEntity>> getAllTodos(){
+        List<TodoEntity> allTodos = todoService.getAllTodos();
         return new ResponseEntity<>(allTodos, HttpStatus.OK);
     }
 
     //Get a single todo
     @GetMapping("/{id}")
-    public ResponseEntity<Todo> getTodo(@PathVariable Integer id){
-        Todo todo = todoService.getTodo(id);
-        return new ResponseEntity<>(todo,HttpStatus.OK);
+    public ResponseEntity<TodoEntity> getTodo(@PathVariable Integer id){
+        try{
+            TodoEntity todo = todoService.getTodo(id);
+            return new ResponseEntity<>(todo,HttpStatus.OK);
+        }
+        catch(TodoNotFoundException e){
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @PutMapping(value = "/{id}",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public Map<String,Object> updateTodo(@PathVariable Integer id, @RequestBody Todo todo){
-        Todo updatedTodo = todoService.updateTodo(id,todo);
+    public Map<String,Object> updateTodo(@PathVariable Integer id, @RequestBody TodoEntity todo){
+        TodoEntity updatedTodo = todoService.updateTodo(id,todo);
         Map<String,Object>  response = new HashMap<>();
         response.put("isSuccessful",true);
         response.put("data",todo);

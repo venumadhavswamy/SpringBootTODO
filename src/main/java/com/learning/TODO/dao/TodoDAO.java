@@ -1,24 +1,15 @@
 package com.learning.TODO.dao;
 
-import com.learning.TODO.helper.Helper;
-import com.learning.TODO.models.Todo;
+import com.learning.TODO.entities.TodoEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
-import static com.fasterxml.jackson.databind.type.LogicalType.Map;
-
-@Component
+//@Component
 public class TodoDAO {
     private JdbcTemplate jdbcTemplate;
     Logger logger = LoggerFactory.getLogger(TodoDAO.class);
@@ -38,7 +29,7 @@ public class TodoDAO {
         logger.info("Table created");
     }
 
-    public Todo createTodo(Todo todo){
+    public TodoEntity createTodo(TodoEntity todo){
         String insertQuery = "insert into todo(id,title,content,status,createdDate,todoDate) values(?,?,?,?,?,?)";
         int rows=0;
         try {
@@ -52,9 +43,9 @@ public class TodoDAO {
     }
 
     //Get single todo
-    public Todo getTodo(int id){
+    public TodoEntity getTodo(int id){
         String selectQuery = "select * from todo where id=?";
-        Todo todo = jdbcTemplate.queryForObject(selectQuery,new TodoMapper(),id);
+        TodoEntity todo = jdbcTemplate.queryForObject(selectQuery,new TodoMapper(),id);
 //        logger.info("todo {}", todoMap);
 //        Todo resultantTodo = new Todo();
 //        resultantTodo.setId((Integer)todoMap.get("id"));
@@ -65,9 +56,9 @@ public class TodoDAO {
         return todo;
     }
 
-    public List<Todo> getAllTodos(){
+    public List<TodoEntity> getAllTodos(){
         String selectQuery = "select * from todo;";
-        List<Todo> todosList = jdbcTemplate.query(selectQuery,new TodoMapper());
+        List<TodoEntity> todosList = jdbcTemplate.query(selectQuery,new TodoMapper());
 //        List<Todo> todosList = todosMap.stream()
 //                .map((todoMap)->{
 //                    Todo resultantTodo = new Todo();
@@ -81,7 +72,7 @@ public class TodoDAO {
         return todosList;
     }
 
-    public Todo updateTodo(int id, Todo todo){
+    public TodoEntity updateTodo(int id, TodoEntity todo){
         String updateQuery = "UPDATE todo set title=?,content=?,status=?,createdDate=?,todoDate=? WHERE id=?";
         int affectedRows = jdbcTemplate.update(updateQuery,todo.getTitle(),todo.getContent(),todo.getStatus(),new Date(),todo.getTodoDate(),id);
         todo.setId(id);

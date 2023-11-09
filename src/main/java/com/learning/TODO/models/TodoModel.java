@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
-public class Todo {
+public class TodoModel {
     private int id;
     private String title;
     private String content;
@@ -14,7 +14,7 @@ public class Todo {
     @JsonFormat(pattern="dd/mm/yyyy")
     private Date todoDate;
 
-    public Todo(int id, String title, String content, String status, Date createdDate, Date todoDate) {
+    public TodoModel(int id, String title, String content, String status, Date createdDate, Date todoDate) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -22,7 +22,7 @@ public class Todo {
         this.createdDate = createdDate;
         this.todoDate = todoDate;
     }
-    public Todo(){
+    public TodoModel(){
 
     }
 
